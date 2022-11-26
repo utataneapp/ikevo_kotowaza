@@ -2,21 +2,36 @@ import { Formik, Form } from "formik"
 import * as Yup from "yup"
 import { Button, Dropdown, Grid, Item } from "semantic-ui-react"
 import "semantic-ui-css/semantic.min.css"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import ModalWrapper from "../modals/ModalWrapper"
 import { closeModal } from "../../store/modal/modalReducer"
 import Record from "../../components/Record"
 import MyTextArea from "./MyTextArea"
 import { SyntheticEvent, useState } from "react"
 import { uploadDataAndReturnPath } from "../../functions/cloudStorage"
-import { kotowazaList } from "../../../pages/api/dropDownList"
+import {
+  getKeyCntFromDatabase,
+  updateUserDatabase,
+  writeDataToDatabase,
+  writeFirstKotoKeyCntToDatabase,
+  writeKotoKeyCntToDatabase,
+} from "../../functions/database"
+import { kotowazaList } from "../../../pages/api/dropdownList"
+import { RootState } from "../../store"
+import { updateUser } from "../../store/auth/authReducer"
+import { writeDataToFirestore } from "../../functions/firestore"
+import { useRouter } from "next/router"
 
 export default function VoicePostForm() {
   const dispatch = useDispatch()
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser)
+  const targetKey = (val: string) =>
+    kotowazaList.find((obj) => obj.value === val)!.key
   const targetReading = (val: string) =>
-    kotowazaList.map((obj) => obj.value == val && obj.reading)
+    kotowazaList.map((obj) => obj.value === val && obj.reading)
   const [file, setFile] = useState<Blob[]>([])
   const [loadingFlag, setLoadingFlag] = useState(false)
+  const router = useRouter()
 
   return (
     <ModalWrapper size="mini" header="音声を投稿する（最大9秒）">
@@ -26,6 +41,7 @@ export default function VoicePostForm() {
           kotowaza: Yup.string().required(),
         })}
         onSubmit={() => {}}
+
         //　Record内のonClickに反応してsubmitされてしまう
 
         // onSubmit={(values, { setSubmitting, setFieldValue }) => {
@@ -76,15 +92,53 @@ export default function VoicePostForm() {
                 size="large"
                 color="teal"
                 content="送信する"
-                onClick={() => {
+                onClick={async () => {
                   setLoadingFlag(true)
                   const pathName = uploadDataAndReturnPath(
                     values.kotowaza,
-                    "userId",
+                    currentUser!.userId,
                     file
                   )
-                  console.log({ ...values, pathName })
+                  const targetKotoKey = targetKey(values.kotowaza)
+                  const targetCnt = await getKeyCntFromDatabase(targetKotoKey)
+                  if (targetCnt !== 0) {
+                    writeKotoKeyCntToDatabase(targetKotoKey, targetCnt)
+                  } else {
+                    writeFirstKotoKeyCntToDatabase(targetKotoKey)
+                  }
+                  const newMyVoice = currentUser?.myVoice
+                    ? (currentUser?.myVoice.slice() as string[])
+                    : []
+                  const newCnt = targetCnt + 1
+                  newMyVoice.push(targetKotoKey.toString() + "-" + newCnt)
+                  dispatch(
+                    updateUser({
+                      ...currentUser!,
+                      myVoice: newMyVoice,
+                      voiceCnt: currentUser!.voiceCnt + 1,
+                    })
+                  )
+                  updateUserDatabase({
+                    ...currentUser!,
+                    myVoice: newMyVoice,
+                    likeList: [],
+                    voiceCnt: currentUser!.voiceCnt + 1,
+                  })
+                  writeDataToDatabase({
+                    userId: currentUser?.userId,
+                    userName: currentUser?.userName,
+                    photoUrl: currentUser?.photoUrl,
+                    kotoKey: targetKotoKey,
+                    dataKey: newCnt,
+                    voiceUrl: pathName,
+                    desc: values.desc,
+                  })
+                  writeDataToFirestore({
+                    kotoKey: targetKotoKey,
+                    dataKey: newCnt,
+                  })
                   dispatch(closeModal())
+                  router.replace("/completed")
                 }}
               ></Button>
             )}

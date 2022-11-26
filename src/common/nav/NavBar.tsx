@@ -2,10 +2,12 @@ import { useDispatch, useSelector } from "react-redux"
 import { Menu, Button } from "semantic-ui-react"
 import "semantic-ui-css/semantic.min.css"
 import { RootState } from "../../store"
-import SignedInMenu from "./SignedInMenu"
-import SignedOutMenu from "./SignedOutMenu"
+
 import { openModal } from "../../store/modal/modalReducer"
 import { useRouter } from "next/router"
+import LogedInMenu from "./LogedInMenu"
+import LogedOutMenu from "./LogedOutMenu"
+import { useState } from "react"
 
 export default function NavBar() {
   const { authentificated } = useSelector((state: RootState) => state.auth)
@@ -14,15 +16,15 @@ export default function NavBar() {
 
   return (
     <Menu fixed="top">
-      <Menu.Item exact to="/" header>
+      <Menu.Item to="/" header>
         <img src="icon.png" alt="logo" style={{ marginRight: 15 }} />
         イケボことわざ
       </Menu.Item>
       <Menu.Item
         content="ホーム"
-        onClick={() => router.push("/voice")}
+        onClick={() => router.push("/home")}
       ></Menu.Item>
-      <Menu.Item content="ランキング" onClick={() => router.push("/ranking")} />
+      {/* <Menu.Item content="投稿完了" onClick={() => router.push("/completed")} /> */}
       {authentificated && (
         <Menu.Item content="お気に入り" onClick={() => router.push("/like")} />
       )}
@@ -39,13 +41,16 @@ export default function NavBar() {
             content="音声を投稿"
             onClick={() =>
               dispatch(
-                openModal({ modalTypes: "VoicePostForm", modalProps: {} })
+                openModal({
+                  modalTypes: "VoicePostForm",
+                  modalProps: {},
+                })
               )
             }
           />
         </Menu.Item>
       )}
-      {authentificated ? <SignedInMenu /> : <SignedOutMenu />}
+      {authentificated ? <LogedInMenu /> : <LogedOutMenu />}
     </Menu>
   )
 }

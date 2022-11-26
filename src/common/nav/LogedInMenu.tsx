@@ -2,11 +2,12 @@ import { useRouter } from "next/router"
 import { useDispatch, useSelector } from "react-redux"
 import { Route } from "react-router-dom"
 import { Dropdown, Image, Menu } from "semantic-ui-react"
+import { displayId } from "../../functions/lib"
 import { RootState } from "../../store"
-import { signOutUser } from "../../store/auth/authReducer"
+import { logOutUser } from "../../store/auth/authReducer"
 import { openModal } from "../../store/modal/modalReducer"
 
-export default function SignedInMenu() {
+export default function LogedInMenu() {
   const dispatch = useDispatch()
   const router = useRouter()
   const { currentUser } = useSelector((state: RootState) => state.auth)
@@ -31,8 +32,8 @@ export default function SignedInMenu() {
           />
           <Dropdown.Item
             onClick={() => {
-              dispatch(signOutUser())
-              router.replace("/voice")
+              dispatch(logOutUser())
+              router.replace("/home")
             }}
             text="ログアウト"
             icon="power"

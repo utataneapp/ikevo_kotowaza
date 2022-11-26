@@ -9,8 +9,9 @@ import MyTextInput from "./MyTextInput"
 import { registerForAuthAndReturnId } from "../../functions/firestore"
 import { SyntheticEvent } from "react"
 import { ageList, sexList } from "../../../pages/api/dropdownList"
-import { writeUserData } from "../../functions/database"
-import { translateErrors } from "../../functions/lib"
+import { writeUserToDatabase } from "../../functions/database"
+import moment from "moment"
+import { nowDate } from "../../functions/lib"
 
 export default function RegistrationForm() {
   const dispatch = useDispatch()
@@ -53,17 +54,36 @@ export default function RegistrationForm() {
           }
           if (userId) {
             //database
-            writeUserData({
+            writeUserToDatabase({
               userId,
               userName: values.userName,
+              email: values.email,
               sex: values.sex,
               age: values.age,
               //初期値
               photoUrl: "",
               voiceCnt: 0,
-              createdAt: new Date(),
+              myVoice: [],
+              likeList: [],
+              createdAt: nowDate(),
             })
-            dispatch(signInUser(values))
+            dispatch(
+              signInUser({
+                userId,
+                userName: values.userName,
+                email: values.email,
+                sex: values.sex,
+                age: values.age,
+                //初期値
+                photoUrl: "",
+                voiceCnt: 0,
+                myVoice: [],
+                likeList: [],
+                createdAt: moment()
+                  .format("YYYY年MM月DD日 HH時mm分")
+                  .toString(),
+              })
+            )
             alert("アカウント登録に成功しました")
             dispatch(closeModal())
           }
@@ -93,7 +113,7 @@ export default function RegistrationForm() {
               maxLength={20}
             />
             <label style={{ color: "gray" }}>性別</label>
-
+            <div style={{ height: 4 }}></div>
             <Dropdown
               placeholder="性別"
               fluid
@@ -105,6 +125,7 @@ export default function RegistrationForm() {
             ></Dropdown>
             <div style={{ height: 16 }}></div>
             <label style={{ color: "gray" }}>年代</label>
+            <div style={{ height: 4 }}></div>
             <Dropdown
               placeholder="年代"
               fluid

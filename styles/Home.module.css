@@ -1,3 +1,11 @@
+.completedUpContainer {
+  background-color: rgb(244, 193, 216);
+}
+
+.completedContent {
+  color: white;
+}
+
 .container {
   padding: 0 2rem;
 }

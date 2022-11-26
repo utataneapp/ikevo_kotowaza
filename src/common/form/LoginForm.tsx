@@ -2,12 +2,13 @@ import { Formik, Form } from "formik"
 import * as Yup from "yup"
 import { Button } from "semantic-ui-react"
 import { useDispatch } from "react-redux"
-import { signInUser } from "../../store/auth/authReducer"
+import { logInUser, signInUser } from "../../store/auth/authReducer"
 import ModalWrapper from "../modals/ModalWrapper"
 import { closeModal } from "../../store/modal/modalReducer"
 import MyTextInput from "./MyTextInput"
 import { logInForAuth } from "../../functions/firestore"
 import { useRouter } from "next/router"
+import { getUserFromDatabase } from "../../functions/database"
 
 export default function LoginForm() {
   const dispatch = useDispatch()
@@ -24,11 +25,16 @@ export default function LoginForm() {
         onSubmit={async (values, { setSubmitting }) => {
           const userId = await logInForAuth(values.email, values.password)
           if (userId) {
-            alert("ログインに成功しました")
-            dispatch(signInUser(values))
-            router.push("/voice")
-            setSubmitting(false)
-            dispatch(closeModal())
+            const value = await getUserFromDatabase(userId)
+            if (value) {
+              dispatch(logInUser({ userId, ...value }))
+              alert("ログインに成功しました")
+              router.push("/home")
+              setSubmitting(false)
+              dispatch(closeModal())
+            } else {
+              alert("ログインに失敗しました")
+            }
           }
         }}
       >

@@ -96,7 +96,7 @@ export default function Record({
         </div>
       ) : (
         <ReactAudioPlayer
-          style={{ marginTop: 16 }}
+          style={{ marginTop: "16px" }}
           src={URL.createObjectURL(new Blob(file))}
           controls
         />

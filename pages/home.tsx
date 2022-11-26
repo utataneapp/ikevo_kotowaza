@@ -1,24 +1,19 @@
-import {
-  Button,
-  Grid,
-  Icon,
-  Image,
-  Item,
-  List,
-  Segment,
-} from "semantic-ui-react"
+import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react"
 import NavBar from "../src/common/nav/NavBar"
 import "semantic-ui-css/semantic.min.css"
-import { displayId, kotowaza } from "../src/functions/lib"
-import { LikeComponent } from "../src/components/LikeComponent"
-import { getVoiceUrl } from "../src/functions/cloudStorage"
 import { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
-import { DATA_DATABASE } from "../src/types/type"
-import { RootState } from "../src/store"
+import { getDataFromFirestore } from "../src/functions/firestore"
+import { DATA_DATABASE, DATA_FIRESTORE } from "../src/types/type"
 import { getDataFromDatabase } from "../src/functions/database"
+import { displayId, kotowaza } from "../src/functions/lib"
+import { getVoiceUrl } from "../src/functions/cloudStorage"
+import { LikeComponent } from "../src/components/LikeComponent"
+import { useSelector } from "react-redux"
+import { RootState } from "../src/store"
+import { useRouter } from "next/router"
+import DeleteButton from "../src/components/DeleteButton"
 
-export default function like() {
+export default function home() {
   const [data, setData] = useState<DATA_DATABASE[]>([])
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()
@@ -26,19 +21,18 @@ export default function like() {
   const [currentLikeList, setCurrentLikeList] = useState<
     { id: string; one: boolean }[]
   >([])
-  const likeList = useSelector(
-    (state: RootState) => state.auth.currentUser?.likeList
-  )
 
   useEffect(() => {
-    if (currentUser?.likeList) {
-      ;(async () => {
-        const result = await getDataFromDatabase(currentUser?.likeList)
-        console.log(result)
-        setData(result)
-      })()
-    }
-  }, [likeList])
+    let displayed = [{}] as DATA_DATABASE[]
+    ;(async () => {
+      const data = await getDataFromFirestore()
+      if (data) {
+        const idList = await Promise.all(data.map((obj) => obj.id))
+        displayed = await getDataFromDatabase(idList)
+        setData(displayed)
+      }
+    })()
+  }, [currentUser?.myVoice])
 
   useEffect(() => {
     if (targetVoice) {
@@ -90,12 +84,12 @@ export default function like() {
                       {val.createdAt}
                     </Item.Content>
                   </span>
+                  <DeleteButton val={val} />
                   <LikeComponent
                     val={val}
                     currentLikeList={currentLikeList}
                     setCurrentLikeList={setCurrentLikeList}
                   />
-
                   {targetName ===
                     val.kotoKey?.toString() + "-" + val.dataKey?.toString() && (
                     <Button
@@ -132,7 +126,6 @@ export default function like() {
                       <i className="play icon"></i>
                     </Button>
                   )}
-
                   {/* <Button color="pink" floated="right" onClick={() => {}}>
                       <i className="heart icon"></i>
                     </Button> */}

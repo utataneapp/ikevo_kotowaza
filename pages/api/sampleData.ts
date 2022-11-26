@@ -1,8 +1,10 @@
+import moment from "moment"
+
 export const kotowazaData = [
   {
     dataId: "1",
     kotowaza: "犬も歩けば棒に当たる",
-    createdAt: new Date("2022-01-01"),
+    createdAt: moment("2022-01-01"),
     desc: "渾身の一撃",
     hostedBy: "id",
     //「いいね」は最新5名まで表示予定 「いいね」をした時のID、名前、登録画像を表示（データ通信の節約）
@@ -23,7 +25,7 @@ export const kotowazaData = [
   {
     dataId: "1",
     kotowaza: "犬も歩けば棒に当たる",
-    createdAt: new Date("2022-01-01"),
+    createdAt: moment("2022-01-01"),
     desc: "渾身の一撃",
     hostedBy: "id",
     //「いいね」は最新5名まで表示予定 「いいね」をした時のID、名前、登録画像を表示（データ通信の節約）

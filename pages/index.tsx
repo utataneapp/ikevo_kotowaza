@@ -18,7 +18,8 @@ export default function Home() {
           <Image size="massive" src="/icon.png" style={{ marginBottom: 12 }} />
           イケボことわざ
         </Header>
-        <Button size="huge" inverted onClick={() => router.push("/voice")}>
+
+        <Button size="huge" inverted onClick={() => router.push("/home")}>
           開始
           <Icon name="arrow right" inverted />
         </Button>

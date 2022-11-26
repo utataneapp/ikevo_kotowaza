@@ -1,8 +1,8 @@
 import "../styles/globals.css"
 import type { AppProps } from "next/app"
-import { Provider } from "react-redux"
+import { Provider, useSelector } from "react-redux"
 import ScrollToTop from "../src/layout/ScrollToTop"
-import { store } from "../src/store"
+import { RootState, store } from "../src/store"
 import "../styles/App.css"
 import { getApps, getApp, initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
@@ -10,6 +10,7 @@ import ModalManager from "../src/common/modals/ModalManager"
 import { getFirestore } from "firebase/firestore"
 import { getDatabase } from "firebase/database"
 import { getStorage } from "firebase/storage"
+import UseRequireLogin from "../src/layout/useRequireLogin"
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_VALFIREBASE_API_KEY,
@@ -35,6 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Provider store={store}>
         <ScrollToTop />
+        <UseRequireLogin />
         <ModalManager />
         <Component {...pageProps} />
       </Provider>

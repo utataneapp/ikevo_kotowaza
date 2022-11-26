@@ -1,3 +1,6 @@
+import moment from "moment"
+import { kotowazaList } from "../../pages/api/dropdownList"
+
 export const translateErrors = (code: string) => {
   const error = {
     title: "エラーが発生しました",
@@ -31,3 +34,16 @@ export const translateErrors = (code: string) => {
   }
   return error
 }
+
+export const displayId = (userID: string) => {
+  //12文字抽出
+  let result = userID.substring(0, 12)
+  result = "@" + result
+  return result
+}
+
+export const kotowaza = (key: number) =>
+  kotowazaList.find((obj) => obj.key === key)?.value
+
+export const nowDate = () =>
+  moment().format("YYYY年MM月DD日 HH時mm分").toString()

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { Dispatch, SetStateAction } from "react"
 
 type Modal = {
   modalTypes: "LoginForm" | "RegistrationForm" | "VoicePostForm"

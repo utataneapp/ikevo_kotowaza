@@ -10,7 +10,7 @@ import ModalManager from "../src/common/modals/ModalManager"
 import { getFirestore } from "firebase/firestore"
 import { getDatabase } from "firebase/database"
 import { getStorage } from "firebase/storage"
-import UseRequireLogin from "../src/layout/useRequireLogin"
+import UseRequireLogin from "../src/layout/UseRequireLogin"
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_VALFIREBASE_API_KEY,

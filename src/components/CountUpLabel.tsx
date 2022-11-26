@@ -16,14 +16,12 @@ export default function CountUpLabel({
         setCnt((prev) => prev + 1)
       }, 1000)
     } else {
-      clearInterval()
       setCnt(0)
     }
   }, [cntFlag])
 
   useEffect(() => {
     if (cnt === 10) {
-      clearInterval()
       setCnt(0)
       setTenCntFlag(true)
     }

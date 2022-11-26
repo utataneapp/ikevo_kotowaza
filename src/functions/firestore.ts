@@ -86,9 +86,7 @@ export const deleteDataToFirestore = async ({
   let nowData = await getDataFromFirestore().catch(() => [] as DATA_FIRESTORE[])
   let newData = [] as DATA_FIRESTORE[]
   const collectionRef = collection(firestore, "data")
-  if (nowData !== []) {
-    newData = nowData.filter((val) => val.id !== kotoKey + "-" + dataKey)
-  }
+  newData = nowData.filter((val) => val.id !== kotoKey + "-" + dataKey)
   await setDoc(
     doc(collectionRef, `data`),
     {

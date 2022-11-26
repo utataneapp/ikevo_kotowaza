@@ -139,91 +139,90 @@ export default function MyPage() {
           </Segment.Group>
         </Grid.Column>
 
-        {data !== [] &&
-          data.map((val) => (
-            <Grid.Column
-              width={15}
-              key={val.kotoKey?.toString() + "-" + val.dataKey?.toString()}
-            >
-              <Segment.Group>
-                <Segment clearing>
-                  <Item.Group>
+        {data.map((val) => (
+          <Grid.Column
+            width={15}
+            key={val.kotoKey?.toString() + "-" + val.dataKey?.toString()}
+          >
+            <Segment.Group>
+              <Segment clearing>
+                <Item.Group>
+                  <Item>
+                    <GridColumn width={7}>
+                      <Item.Content verticalAlign="middle">
+                        <Item.Header content={kotowaza(val.kotoKey!)!} />
+                        <Item.Description content={val.desc} />
+                      </Item.Content>
+                    </GridColumn>
+                  </Item>
+
+                  <Segment clearing>
                     <Item>
-                      <GridColumn width={7}>
-                        <Item.Content verticalAlign="middle">
-                          <Item.Header content={kotowaza(val.kotoKey!)!} />
-                          <Item.Description content={val.desc} />
-                        </Item.Content>
-                      </GridColumn>
+                      <DeleteButton val={val} />
+                      <Button
+                        color="pink"
+                        floated="right"
+                        onClick={async () => {}}
+                      >
+                        <i className="heart icon"></i>
+                        <label color="pink">{val.like}</label>
+                      </Button>
+                      {targetName ===
+                        val.kotoKey?.toString() +
+                          "-" +
+                          val.dataKey?.toString() && (
+                        <Button
+                          color="blue"
+                          floated="right"
+                          onClick={() => {
+                            targetVoice!.pause()
+                            setTargetName("")
+                          }}
+                        >
+                          <i className="pause icon"></i>
+                        </Button>
+                      )}
+                      {targetName !==
+                        val.kotoKey?.toString() +
+                          "-" +
+                          val.dataKey?.toString() && (
+                        <Button
+                          color="blue"
+                          floated="right"
+                          onClick={async (e) => {
+                            const url = await getVoiceUrl(
+                              kotowaza(val.kotoKey!)!,
+                              val.voiceUrl
+                            )
+                            const voice = new Audio(url!)
+                            voice.play()
+                            setTargetVoice(voice)
+                            setTargetName(
+                              val.kotoKey?.toString() +
+                                "-" +
+                                val.dataKey?.toString()
+                            )
+                          }}
+                        >
+                          <i className="play icon"></i>
+                        </Button>
+                      )}
                     </Item>
 
-                    <Segment clearing>
-                      <Item>
-                        <DeleteButton val={val} />
-                        <Button
-                          color="pink"
-                          floated="right"
-                          onClick={async () => {}}
-                        >
-                          <i className="heart icon"></i>
-                          <label color="pink">{val.like}</label>
-                        </Button>
-                        {targetName ===
-                          val.kotoKey?.toString() +
-                            "-" +
-                            val.dataKey?.toString() && (
-                          <Button
-                            color="blue"
-                            floated="right"
-                            onClick={() => {
-                              targetVoice!.pause()
-                              setTargetName("")
-                            }}
-                          >
-                            <i className="pause icon"></i>
-                          </Button>
-                        )}
-                        {targetName !==
-                          val.kotoKey?.toString() +
-                            "-" +
-                            val.dataKey?.toString() && (
-                          <Button
-                            color="blue"
-                            floated="right"
-                            onClick={async (e) => {
-                              const url = await getVoiceUrl(
-                                kotowaza(val.kotoKey!)!,
-                                val.voiceUrl
-                              )
-                              const voice = new Audio(url!)
-                              voice.play()
-                              setTargetVoice(voice)
-                              setTargetName(
-                                val.kotoKey?.toString() +
-                                  "-" +
-                                  val.dataKey?.toString()
-                              )
-                            }}
-                          >
-                            <i className="play icon"></i>
-                          </Button>
-                        )}
-                      </Item>
-
-                      <Item>
-                        <span style={{ flexDirection: "row", marginTop: 4 }}>
-                          <Item.Content>
-                            <Icon name="clock"></Icon>
-                            {val.createdAt}
-                          </Item.Content>
-                        </span>
-                      </Item>
-                    </Segment>
-                  </Item.Group>
-                </Segment>
-              </Segment.Group>
-            </Grid.Column>
-          ))}
+                    <Item>
+                      <span style={{ flexDirection: "row", marginTop: 4 }}>
+                        <Item.Content>
+                          <Icon name="clock"></Icon>
+                          {val.createdAt}
+                        </Item.Content>
+                      </span>
+                    </Item>
+                  </Segment>
+                </Item.Group>
+              </Segment>
+            </Segment.Group>
+          </Grid.Column>
+        ))}
       </Grid>
     </>
   )

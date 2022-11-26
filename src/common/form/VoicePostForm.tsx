@@ -137,8 +137,10 @@ export default function VoicePostForm() {
                     kotoKey: targetKotoKey,
                     dataKey: newCnt,
                   })
-                  dispatch(closeModal())
-                  router.replace("/completed")
+                  setTimeout(() => {
+                    dispatch(closeModal())
+                    router.replace("/completed")
+                  }, 1000)
                 }}
               ></Button>
             )}

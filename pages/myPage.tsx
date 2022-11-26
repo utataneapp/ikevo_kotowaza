@@ -20,7 +20,7 @@ import "react-h5-audio-player/lib/styles.css"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
 import DeleteButton from "../src/components/DeleteButton"
 
-export default function myPage() {
+export default function MyPage() {
   const router = useRouter()
   const currentUser = useSelector((state: RootState) => state.auth.currentUser)
   const authentificated = useSelector(
@@ -159,6 +159,7 @@ export default function myPage() {
 
                     <Segment clearing>
                       <Item>
+                        <DeleteButton val={val} />
                         <Button
                           color="pink"
                           floated="right"

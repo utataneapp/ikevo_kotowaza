@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import { Button, Divider, Header, Item, List, Segment } from "semantic-ui-react"
 import styles from "../styles/Home.module.css"
 
-export default function completed() {
+export default function Completed() {
   const router = useRouter()
   return (
     <>

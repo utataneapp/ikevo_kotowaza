@@ -1,12 +1,4 @@
-import {
-  Button,
-  Grid,
-  Icon,
-  Image,
-  Item,
-  List,
-  Segment,
-} from "semantic-ui-react"
+import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react"
 import NavBar from "../src/common/nav/NavBar"
 import "semantic-ui-css/semantic.min.css"
 import { displayId, kotowaza } from "../src/functions/lib"

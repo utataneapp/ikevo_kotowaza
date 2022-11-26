@@ -3,7 +3,7 @@ import NavBar from "../src/common/nav/NavBar"
 import "semantic-ui-css/semantic.min.css"
 import { useEffect, useState } from "react"
 import { getDataFromFirestore } from "../src/functions/firestore"
-import { DATA_DATABASE, DATA_FIRESTORE } from "../src/types/type"
+import { DATA_DATABASE } from "../src/types/type"
 import { getDataFromDatabase } from "../src/functions/database"
 import { displayId, kotowaza } from "../src/functions/lib"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
@@ -13,7 +13,7 @@ import { RootState } from "../src/store"
 import { useRouter } from "next/router"
 import DeleteButton from "../src/components/DeleteButton"
 
-export default function home() {
+export default function Home() {
   const [data, setData] = useState<DATA_DATABASE[]>([])
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()

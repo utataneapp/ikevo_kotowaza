@@ -10,7 +10,7 @@ import { DATA_DATABASE } from "../src/types/type"
 import { RootState } from "../src/store"
 import { getDataFromDatabase } from "../src/functions/database"
 
-export default function like() {
+export default function Like() {
   const [data, setData] = useState<DATA_DATABASE[]>([])
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()

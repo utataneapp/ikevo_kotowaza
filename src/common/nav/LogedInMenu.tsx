@@ -26,7 +26,7 @@ export default function LogedInMenu() {
             icon="plus"
           />
           <Dropdown.Item
-            onClick={() => router.push("/myPage")}
+            onClick={() => router.push("/mypage")}
             text="マイページ"
             icon="user"
           />

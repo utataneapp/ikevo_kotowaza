@@ -31,7 +31,7 @@ export default function NavBar() {
       {authentificated && (
         <Menu.Item
           content="マイページ"
-          onClick={() => router.push("/myPage")}
+          onClick={() => router.push("/mypage")}
         />
       )}
       {authentificated && (

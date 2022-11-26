@@ -10,7 +10,6 @@ import { getVoiceUrl } from "../src/functions/cloudStorage"
 import { LikeComponent } from "../src/components/LikeComponent"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
-import { useRouter } from "next/router"
 import DeleteButton from "../src/components/DeleteButton"
 
 export default function Home() {

@@ -121,7 +121,7 @@ export default function Home() {
                         const voice = new Audio()
                         const source = document.createElement("source")
                         source.setAttribute("src", url)
-                        source.setAttribute("type", "video/mp4")
+                        source.setAttribute("mimetype", "video/mp4")
                         voice.append(source)
                         voice.play()
                         setTargetVoice(voice)

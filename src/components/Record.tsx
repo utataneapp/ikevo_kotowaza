@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react"
 import ReactAudioPlayer from "react-audio-player"
 import { Button, Label } from "semantic-ui-react"
 import CountUpLabel from "./CountUpLabel"
+import AudioPlayer from "react-h5-audio-player"
+import "react-h5-audio-player/lib/styles.css"
 
 export default function Record({
   file,
@@ -34,16 +36,15 @@ export default function Record({
   }, [tenCntFlag])
 
   const handleSuccess = (stream: MediaStream) => {
-    try {
-      audioRef.current = new MediaRecorder(stream, {
-        mimeType: "audio/webm",
-      })
-    } catch {
-      // ios
-      audioRef.current = new MediaRecorder(stream, {
-        mimeType: "video/mp4",
-      })
+    let options = undefined as MediaRecorderOptions | undefined
+    if (MediaRecorder.isTypeSupported("video/webm; codecs=vp9")) {
+      options = { mimeType: "video/webm; codecs=vp9" }
+    } else if (MediaRecorder.isTypeSupported("video/webm")) {
+      options = { mimeType: "video/webm" }
+    } else if (MediaRecorder.isTypeSupported("video/mp4")) {
+      options = { mimeType: "video/mp4", videoBitsPerSecond: 100000 }
     }
+    audioRef.current = new MediaRecorder(stream, options)
 
     var chunks = [] as Blob[]
     audioRef.current.addEventListener("dataavailable", (ele) => {
@@ -51,6 +52,7 @@ export default function Record({
         chunks.push(ele.data)
       }
       setFile(chunks)
+      console.log(chunks)
     })
 
     audioRef.current.addEventListener("start", () => setAudioState(false))
@@ -104,10 +106,9 @@ export default function Record({
           <CountUpLabel cntFlag={cntFlag} setTenCntFlag={setTenCntFlag} />
         </div>
       ) : (
-        <ReactAudioPlayer
+        <AudioPlayer
           style={{ marginTop: "16px" }}
           src={URL.createObjectURL(new Blob(file))}
-          controls
         />
       )}
     </>

@@ -2,7 +2,7 @@ import "../styles/globals.css"
 import type { AppProps } from "next/app"
 import { Provider, useSelector } from "react-redux"
 import ScrollToTop from "../src/layout/ScrollToTop"
-import { RootState, store } from "../src/store"
+import { store } from "../src/store"
 import "../styles/App.css"
 import { getApps, getApp, initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
@@ -11,6 +11,8 @@ import { getFirestore } from "firebase/firestore"
 import { getDatabase } from "firebase/database"
 import { getStorage } from "firebase/storage"
 import UseRequireLogin from "../src/layout/UseRequireLogin"
+import { DefaultSeo } from "next-seo"
+import Head from "next/head"
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_VALFIREBASE_API_KEY,
@@ -35,6 +37,32 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Provider store={store}>
+        <Head>
+          <meta
+            name="viewport"
+            content="maximum-scale=1.0, initial-scale=1.0, width=device-width"
+          />
+        </Head>
+        <DefaultSeo
+          defaultTitle="イケボことわざ"
+          description=""
+          openGraph={{
+            type: "website",
+            title: "イケボことわざ",
+            description: "",
+            site_name: "イケボことわざ",
+            url: "",
+            images: [
+              {
+                url: "icon.png",
+                width: 400,
+                height: 400,
+                alt: "イケボことわざのアイコン",
+                type: "image/png",
+              },
+            ],
+          }}
+        />
         <ScrollToTop />
         <UseRequireLogin />
         <ModalManager />

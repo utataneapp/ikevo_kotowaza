@@ -11,7 +11,6 @@ import { LikeComponent } from "../src/components/LikeComponent"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
 import DeleteButton from "../src/components/DeleteButton"
-import NavBarC from "../src/common/nav/NavBar copy"
 
 export default function Home() {
   const [data, setData] = useState<DATA_DATABASE[]>([])

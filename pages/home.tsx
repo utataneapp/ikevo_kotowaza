@@ -55,7 +55,7 @@ export default function Home() {
       {data &&
         data.map((val) => (
           <Grid centered key={val.kotoKey + "-" + val.dataKey}>
-            <Grid.Column width={15}>
+            <Grid.Column width={15} verticalAlign="middle">
               <Segment.Group>
                 <Segment>
                   <Item.Group>

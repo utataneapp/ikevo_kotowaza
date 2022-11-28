@@ -34,9 +34,17 @@ export default function Record({
   }, [tenCntFlag])
 
   const handleSuccess = (stream: MediaStream) => {
-    audioRef.current = new MediaRecorder(stream, {
-      mimeType: "video/webm;codecs=vp9",
-    })
+    try {
+      audioRef.current = new MediaRecorder(stream, {
+        mimeType: "audio/webm",
+      })
+    } catch {
+      // ios
+      audioRef.current = new MediaRecorder(stream, {
+        mimeType: "video/mp4",
+      })
+    }
+
     var chunks = [] as Blob[]
     audioRef.current.addEventListener("dataavailable", (ele) => {
       if (ele.data.size > 0) {
@@ -58,6 +66,7 @@ export default function Record({
 
   const handleStart = () => {
     setCntFlag(true)
+
     audioRef.current!.start()
   }
 

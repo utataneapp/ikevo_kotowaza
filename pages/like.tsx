@@ -53,7 +53,11 @@ export default function Like() {
       </Grid>
       {data.length !== 0 ? (
         data.map((val) => (
-          <Grid centered key={val.kotoKey + "-" + val.dataKey}>
+          <Grid
+            centered
+            key={val.kotoKey + "-" + val.dataKey}
+            verticalAlign="middle"
+          >
             <Grid.Column width={15}>
               <Segment.Group>
                 <Segment>

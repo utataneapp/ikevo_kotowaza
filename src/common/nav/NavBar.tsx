@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { Menu, Button } from "semantic-ui-react"
+import { Menu, Button, Grid } from "semantic-ui-react"
 import "semantic-ui-css/semantic.min.css"
 import { RootState } from "../../store"
 
@@ -15,42 +15,69 @@ export default function NavBar() {
   const router = useRouter()
 
   return (
-    <Menu fixed="top">
-      <Menu.Item to="/" header>
-        <img src="icon.png" alt="logo" style={{ marginRight: 15 }} />
-        イケボことわざ
-      </Menu.Item>
-      <Menu.Item
-        content="ホーム"
-        onClick={() => router.push("/home")}
-      ></Menu.Item>
-      {/* <Menu.Item content="投稿完了" onClick={() => router.push("/completed")} /> */}
-      {authentificated && (
-        <Menu.Item content="お気に入り" onClick={() => router.push("/like")} />
-      )}
-      {authentificated && (
-        <Menu.Item
-          content="マイページ"
-          onClick={() => router.push("/mypage")}
-        />
-      )}
-      {authentificated && (
-        <Menu.Item>
-          <Button
-            color="black"
-            content="音声を投稿"
-            onClick={() =>
-              dispatch(
-                openModal({
-                  modalTypes: "VoicePostForm",
-                  modalProps: {},
-                })
-              )
-            }
-          />
-        </Menu.Item>
-      )}
-      {authentificated ? <LogedInMenu /> : <LogedOutMenu />}
-    </Menu>
+    <Grid>
+      <Grid.Row only="mobile">
+        <Menu fixed="top">
+          <Menu.Item onClick={() => router.push("/home")} header>
+            <img src="icon.png" alt="logo" style={{ marginRight: 15 }} />
+            イケボことわざ
+          </Menu.Item>
+
+          {authentificated ? (
+            <LogedInMenu mobile={true} />
+          ) : (
+            <LogedOutMenu mobile={true} />
+          )}
+        </Menu>
+      </Grid.Row>
+      <Grid.Row only="tablet computer">
+        <Grid.Column>
+          <Menu fixed="top">
+            <Menu.Item onClick={() => router.push("/home")} header>
+              <img src="icon.png" alt="logo" style={{ marginRight: 15 }} />
+              イケボことわざ
+            </Menu.Item>
+            <Menu.Item
+              content="ホーム"
+              onClick={() => router.push("/home")}
+            ></Menu.Item>
+            {/* <Menu.Item content="投稿完了" onClick={() => router.push("/completed")} /> */}
+            {authentificated && (
+              <Menu.Item
+                content="お気に入り"
+                onClick={() => router.push("/like")}
+              />
+            )}
+            {authentificated && (
+              <Menu.Item
+                content="マイページ"
+                onClick={() => router.push("/mypage")}
+              />
+            )}
+            {authentificated && (
+              <Menu.Item>
+                <Button
+                  color="black"
+                  content="音声を投稿"
+                  onClick={() =>
+                    dispatch(
+                      openModal({
+                        modalTypes: "VoicePostForm",
+                        modalProps: {},
+                      })
+                    )
+                  }
+                />
+              </Menu.Item>
+            )}
+            {authentificated ? (
+              <LogedInMenu mobile={false} />
+            ) : (
+              <LogedOutMenu mobile={false} />
+            )}
+          </Menu>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   )
 }

@@ -51,7 +51,7 @@ export default function Like() {
       <Grid>
         <Grid.Column width={16}></Grid.Column>
       </Grid>
-      {data &&
+      {data.length !== 0 ? (
         data.map((val) => (
           <Grid centered key={val.kotoKey + "-" + val.dataKey}>
             <Grid.Column width={15}>
@@ -132,7 +132,14 @@ export default function Like() {
               </Segment.Group>
             </Grid.Column>
           </Grid>
-        ))}
+        ))
+      ) : (
+        <Grid>
+          <Grid.Column textAlign="center" width={16}>
+            お気に入り登録はありません
+          </Grid.Column>
+        </Grid>
+      )}
     </>
   )
 }

@@ -11,6 +11,7 @@ import { LikeComponent } from "../src/components/LikeComponent"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
 import DeleteButton from "../src/components/DeleteButton"
+import NavBarC from "../src/common/nav/NavBar copy"
 
 export default function Home() {
   const [data, setData] = useState<DATA_DATABASE[]>([])
@@ -65,7 +66,7 @@ export default function Home() {
                         circular
                         src="icon.png"
                       ></Item.Image>
-                      <Item.Content verticalAlign="middle">
+                      <Item.Content>
                         <Item.Header content={kotowaza(val.kotoKey!)!} />
                         <Item.Content>
                           <Icon name="user"></Icon>

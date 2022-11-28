@@ -87,7 +87,9 @@ export default function Home() {
                       {val.createdAt}
                     </Item.Content>
                   </span>
-                  <DeleteButton val={val} />
+                  {currentUser?.userId === val.byUserId && (
+                    <DeleteButton val={val} />
+                  )}
                   <LikeComponent
                     val={val}
                     currentLikeList={currentLikeList}
@@ -116,7 +118,11 @@ export default function Home() {
                           kotowaza(val.kotoKey!)!,
                           val.voiceUrl
                         )
-                        const voice = new Audio(url!)
+                        const voice = new Audio()
+                        const source = document.createElement("source")
+                        source.setAttribute("src", url)
+                        source.setAttribute("type", "video/mp4")
+                        voice.append(source)
                         voice.play()
                         setTargetVoice(voice)
                         setTargetName(

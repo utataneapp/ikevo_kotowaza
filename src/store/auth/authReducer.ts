@@ -1,9 +1,11 @@
 import { createSlice, current, PayloadAction } from "@reduxjs/toolkit"
+import { DATA_DATABASE } from "../../types/type"
 
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
     authentificated: false,
+    tmpData: [],
     currentUser: null as null | {
       userId: string
       userName: string
@@ -82,9 +84,19 @@ export const authSlice = createSlice({
         },
       }
     },
+    refrectInTmpData: (state, aciton: PayloadAction<DATA_DATABASE[]>) => {
+      return {
+        ...state,
+      }
+    },
   },
 })
 
-export const { signInUser, logInUser, logOutUser, updateUser } =
-  authSlice.actions
+export const {
+  signInUser,
+  logInUser,
+  logOutUser,
+  updateUser,
+  refrectInTmpData,
+} = authSlice.actions
 export default authSlice.reducer

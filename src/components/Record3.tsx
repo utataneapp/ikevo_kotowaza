@@ -164,7 +164,7 @@ export default function Record3({
           <div className="inner">
             {file.map((recording) => {
               if (!recording.ts) {
-                return <div />
+                return <div key={recording.ts} />
               }
 
               return (
@@ -173,6 +173,7 @@ export default function Record3({
                     style={{ marginTop: "16px" }}
                     src={recording.blobUrl}
                     controls
+                    key={recording.ts}
                   />
                 </>
               )

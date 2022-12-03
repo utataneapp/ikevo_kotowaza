@@ -32,6 +32,8 @@ type RECORDING_SERVICE = {
     usingMediaRecorder: typeof window.MediaRecorder
     enableEchoCancellation: true
   }
+  startRecording: any
+  stopRecording: any
 } | null
 
 export default function Record3({
@@ -122,7 +124,7 @@ export default function Record3({
     setTenCntFlag(false)
   }
 
-  function onNewRecording(evt: Event) {
+  function onNewRecording(evt: any) {
     setFile([...file, evt.detail.recording])
   }
 

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { getDataFromFirestore } from "../src/functions/firestore"
 import { DATA_DATABASE } from "../src/types/type"
 import { getDataFromDatabase } from "../src/functions/database"
-import { displayId, kotowaza } from "../src/functions/lib"
+import { checkOkByDevice, displayId, kotowaza } from "../src/functions/lib"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
 import { LikeComponent } from "../src/components/LikeComponent"
 import { useSelector } from "react-redux"
@@ -90,50 +90,66 @@ export default function Home() {
                   {currentUser?.userId === val.byUserId && (
                     <DeleteButton val={val} />
                   )}
-                  <LikeComponent
-                    val={val}
-                    currentLikeList={currentLikeList}
-                    setCurrentLikeList={setCurrentLikeList}
-                  />
-                  {targetName ===
-                    val.kotoKey?.toString() + "-" + val.dataKey?.toString() && (
-                    <Button
-                      color="red"
-                      floated="right"
-                      onClick={() => {
-                        targetVoice!.pause()
-                        setTargetName("")
-                      }}
-                    >
-                      <i className="pause icon"></i>
-                    </Button>
-                  )}
-                  {targetName !==
-                    val.kotoKey?.toString() + "-" + val.dataKey?.toString() && (
-                    <Button
-                      color="facebook"
-                      floated="right"
-                      onClick={async () => {
-                        const url = await getVoiceUrl(
-                          kotowaza(val.kotoKey!)!,
-                          val.voiceUrl
-                        )
-                        const voice = new Audio()
-                        const source = document.createElement("source")
-                        source.setAttribute("src", url)
-                        source.setAttribute("type", "video/mp4")
-                        voice.append(source)
-                        voice.play()
-                        setTargetVoice(voice)
-                        setTargetName(
+                  {val &&
+                    checkOkByDevice(
+                      val!.ios!,
+                      MediaRecorder.isTypeSupported("video/mp4")
+                    ) && (
+                      <>
+                        <LikeComponent
+                          val={val}
+                          currentLikeList={currentLikeList}
+                          setCurrentLikeList={setCurrentLikeList}
+                        />
+
+                        {targetName ===
                           val.kotoKey?.toString() +
                             "-" +
-                            val.dataKey?.toString()
-                        )
-                      }}
-                    >
-                      <i className="play icon"></i>
-                    </Button>
+                            val.dataKey?.toString() && (
+                          <Button
+                            color="red"
+                            floated="right"
+                            onClick={() => {
+                              targetVoice!.pause()
+                              setTargetName("")
+                            }}
+                          >
+                            <i className="pause icon"></i>
+                          </Button>
+                        )}
+                        {targetName !==
+                          val.kotoKey?.toString() +
+                            "-" +
+                            val.dataKey?.toString() && (
+                          <Button
+                            color="facebook"
+                            floated="right"
+                            onClick={async () => {
+                              const url = await getVoiceUrl(
+                                kotowaza(val.kotoKey!)!,
+                                val.voiceUrl
+                              )
+                              const voice = new Audio()
+                              const source = document.createElement("source")
+                              source.setAttribute("src", url)
+                              source.setAttribute("type", "video/mp4")
+                              voice.append(source)
+                              voice.play()
+                              setTargetVoice(voice)
+                              setTargetName(
+                                val.kotoKey?.toString() +
+                                  "-" +
+                                  val.dataKey?.toString()
+                              )
+                            }}
+                          >
+                            <i className="play icon"></i>
+                          </Button>
+                        )}
+                      </>
+                    )}
+                  {!val.ios && MediaRecorder.isTypeSupported("video/mp4") && (
+                    <label>iOS端末では再生できません</label>
                   )}
                   {/* <Button color="pink" floated="right" onClick={() => {}}>
                       <i className="heart icon"></i>

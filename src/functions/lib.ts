@@ -47,3 +47,13 @@ export const kotowaza = (key: number) =>
 
 export const nowDate = () =>
   moment().format("YYYY年MM月DD日 HH時mm分").toString()
+
+export const checkOkByDevice = (updatedByIos: boolean, deviceIos: boolean) => {
+  if (!updatedByIos) {
+    if (deviceIos) {
+      return false
+    }
+    return true
+  }
+  return true
+}

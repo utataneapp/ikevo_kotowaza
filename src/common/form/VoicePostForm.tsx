@@ -120,6 +120,7 @@ export default function VoicePostForm() {
                     : []
                   const newCnt = targetCnt + 1
                   newMyVoice.push(targetKotoKey.toString() + "-" + newCnt)
+                  const iosFlag = MediaRecorder.isTypeSupported("video/mp4")
                   dispatch(
                     updateUser({
                       ...currentUser!,
@@ -142,7 +143,7 @@ export default function VoicePostForm() {
                     voiceUrl: pathName,
                     desc: values.desc,
                     // iosの場合はtrue
-                    ios: MediaRecorder.isTypeSupported("video/mp4"),
+                    ios: iosFlag,
                   })
                   writeDataToFirestore({
                     kotoKey: targetKotoKey,

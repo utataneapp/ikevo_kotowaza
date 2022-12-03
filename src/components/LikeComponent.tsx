@@ -46,7 +46,7 @@ export const LikeComponent = ({
       floated="right"
       onClick={async () => {
         if (currentUser) {
-          if (currentUser.userId === val.byUserId) {
+          if (currentUser.userId !== val.byUserId) {
             let newList = [] as string[]
             const key = val.kotoKey + "-" + val.dataKey
             if (currentUser.likeList) {

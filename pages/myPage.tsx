@@ -13,7 +13,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { displayId, kotowaza } from "../src/functions/lib"
+import { checkOkByDevice, displayId, kotowaza } from "../src/functions/lib"
 import { getDataFromDatabase } from "../src/functions/database"
 import { DATA_DATABASE } from "../src/types/type"
 import "react-h5-audio-player/lib/styles.css"
@@ -21,7 +21,6 @@ import { getVoiceUrl } from "../src/functions/cloudStorage"
 import DeleteButton from "../src/components/DeleteButton"
 
 export default function MyPage() {
-  const router = useRouter()
   const currentUser = useSelector((state: RootState) => state.auth.currentUser)
   const authentificated = useSelector(
     (state: RootState) => state.auth.authentificated
@@ -35,7 +34,6 @@ export default function MyPage() {
     if (currentUser) {
       ;(async () => {
         const result = await getDataFromDatabase(myPageData)
-        console.log(result)
         setData(result)
       })()
     }
@@ -141,7 +139,7 @@ export default function MyPage() {
             key={val.kotoKey + "-" + val.dataKey}
             verticalAlign="middle"
           >
-            <Grid.Column width={15}>
+            <Grid.Column width={14}>
               <Segment.Group>
                 <Segment>
                   <Item.Group>
@@ -165,41 +163,56 @@ export default function MyPage() {
                     <i className="heart icon"></i>
                     <label color="pink">{val.like}</label>
                   </Button>
-                  {targetName ===
-                    val.kotoKey?.toString() + "-" + val.dataKey?.toString() && (
-                    <Button
-                      color="red"
-                      floated="right"
-                      onClick={() => {
-                        targetVoice!.pause()
-                        setTargetName("")
-                      }}
-                    >
-                      <i className="pause icon"></i>
-                    </Button>
-                  )}
-                  {targetName !==
-                    val.kotoKey?.toString() + "-" + val.dataKey?.toString() && (
-                    <Button
-                      color="facebook"
-                      floated="right"
-                      onClick={async () => {
-                        const url = await getVoiceUrl(
-                          kotowaza(val.kotoKey!)!,
-                          val.voiceUrl
-                        )
-                        const voice = new Audio(url!)
-                        voice.play()
-                        setTargetVoice(voice)
-                        setTargetName(
+                  {val &&
+                    checkOkByDevice(
+                      val!.ios!,
+                      MediaRecorder.isTypeSupported("video/mp4")
+                    ) && (
+                      <>
+                        {targetName ===
                           val.kotoKey?.toString() +
                             "-" +
-                            val.dataKey?.toString()
-                        )
-                      }}
-                    >
-                      <i className="play icon"></i>
-                    </Button>
+                            val.dataKey?.toString() && (
+                          <Button
+                            color="red"
+                            floated="right"
+                            onClick={() => {
+                              targetVoice!.pause()
+                              setTargetName("")
+                            }}
+                          >
+                            <i className="pause icon"></i>
+                          </Button>
+                        )}
+                        {targetName !==
+                          val.kotoKey?.toString() +
+                            "-" +
+                            val.dataKey?.toString() && (
+                          <Button
+                            color="facebook"
+                            floated="right"
+                            onClick={async () => {
+                              const url = await getVoiceUrl(
+                                kotowaza(val.kotoKey!)!,
+                                val.voiceUrl
+                              )
+                              const voice = new Audio(url!)
+                              voice.play()
+                              setTargetVoice(voice)
+                              setTargetName(
+                                val.kotoKey?.toString() +
+                                  "-" +
+                                  val.dataKey?.toString()
+                              )
+                            }}
+                          >
+                            <i className="play icon"></i>
+                          </Button>
+                        )}
+                      </>
+                    )}
+                  {!val.ios && MediaRecorder.isTypeSupported("video/mp4") && (
+                    <label>iOS端末では再生できません</label>
                   )}
                 </Segment>
               </Segment.Group>

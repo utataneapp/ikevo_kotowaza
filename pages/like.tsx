@@ -1,7 +1,7 @@
 import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react"
 import NavBar from "../src/common/nav/NavBar"
 import "semantic-ui-css/semantic.min.css"
-import { displayId, kotowaza } from "../src/functions/lib"
+import { checkOkByDevice, displayId, kotowaza } from "../src/functions/lib"
 import { LikeComponent } from "../src/components/LikeComponent"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
 import { useEffect, useState } from "react"
@@ -86,47 +86,61 @@ export default function Like() {
                       {val.createdAt}
                     </Item.Content>
                   </span>
-                  <LikeComponent
-                    val={val}
-                    currentLikeList={currentLikeList}
-                    setCurrentLikeList={setCurrentLikeList}
-                  />
+                  {checkOkByDevice(
+                    val!.ios!,
+                    MediaRecorder.isTypeSupported("video/mp4")
+                  ) && (
+                    <>
+                      <LikeComponent
+                        val={val}
+                        currentLikeList={currentLikeList}
+                        setCurrentLikeList={setCurrentLikeList}
+                      />
 
-                  {targetName ===
-                    val.kotoKey?.toString() + "-" + val.dataKey?.toString() && (
-                    <Button
-                      color="red"
-                      floated="right"
-                      onClick={() => {
-                        targetVoice!.pause()
-                        setTargetName("")
-                      }}
-                    >
-                      <i className="pause icon"></i>
-                    </Button>
+                      {targetName ===
+                        val.kotoKey?.toString() +
+                          "-" +
+                          val.dataKey?.toString() && (
+                        <Button
+                          color="red"
+                          floated="right"
+                          onClick={() => {
+                            targetVoice!.pause()
+                            setTargetName("")
+                          }}
+                        >
+                          <i className="pause icon"></i>
+                        </Button>
+                      )}
+                      {targetName !==
+                        val.kotoKey?.toString() +
+                          "-" +
+                          val.dataKey?.toString() && (
+                        <Button
+                          color="facebook"
+                          floated="right"
+                          onClick={async () => {
+                            const url = await getVoiceUrl(
+                              kotowaza(val.kotoKey!)!,
+                              val.voiceUrl
+                            )
+                            const voice = new Audio(url!)
+                            voice.play()
+                            setTargetVoice(voice)
+                            setTargetName(
+                              val.kotoKey?.toString() +
+                                "-" +
+                                val.dataKey?.toString()
+                            )
+                          }}
+                        >
+                          <i className="play icon"></i>
+                        </Button>
+                      )}
+                    </>
                   )}
-                  {targetName !==
-                    val.kotoKey?.toString() + "-" + val.dataKey?.toString() && (
-                    <Button
-                      color="facebook"
-                      floated="right"
-                      onClick={async () => {
-                        const url = await getVoiceUrl(
-                          kotowaza(val.kotoKey!)!,
-                          val.voiceUrl
-                        )
-                        const voice = new Audio(url!)
-                        voice.play()
-                        setTargetVoice(voice)
-                        setTargetName(
-                          val.kotoKey?.toString() +
-                            "-" +
-                            val.dataKey?.toString()
-                        )
-                      }}
-                    >
-                      <i className="play icon"></i>
-                    </Button>
+                  {!val.ios && MediaRecorder.isTypeSupported("video/mp4") && (
+                    <label>iOS端末では再生できません</label>
                   )}
 
                   {/* <Button color="pink" floated="right" onClick={() => {}}>

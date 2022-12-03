@@ -7,7 +7,6 @@ import { openModal } from "../../store/modal/modalReducer"
 import { useRouter } from "next/router"
 import LogedInMenu from "./LogedInMenu"
 import LogedOutMenu from "./LogedOutMenu"
-import { useState } from "react"
 
 export default function NavBar() {
   const { authentificated } = useSelector((state: RootState) => state.auth)

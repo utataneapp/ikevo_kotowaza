@@ -21,6 +21,14 @@ import { RootState } from "../../store"
 import { updateUser } from "../../store/auth/authReducer"
 import { writeDataToFirestore } from "../../functions/firestore"
 import { useRouter } from "next/router"
+import Record3 from "../../components/Record3"
+
+type Recording = {
+  ts: number
+  blobUrl: string
+  mimeType: string
+  size: number
+}
 
 export default function VoicePostForm() {
   const dispatch = useDispatch()
@@ -29,7 +37,8 @@ export default function VoicePostForm() {
     kotowazaList.find((obj) => obj.value === val)!.key
   const targetReading = (val: string) =>
     kotowazaList.map((obj) => obj.value === val && obj.reading)
-  const [file, setFile] = useState<Blob[]>([])
+  // const [file, setFile] = useState<Blob[]>([])
+  const [file, setFile] = useState<Recording[]>([])
   const [loadingFlag, setLoadingFlag] = useState(false)
   const router = useRouter()
 
@@ -80,7 +89,7 @@ export default function VoicePostForm() {
               placeholder="説明（最大140文字）"
               maxLength={140}
             />
-            <Record file={file} setFile={setFile} />
+            <Record3 file={file} setFile={setFile} />
             <Grid>
               <Grid.Column width={16}></Grid.Column>
               <Grid.Column width={16}></Grid.Column>
@@ -132,15 +141,17 @@ export default function VoicePostForm() {
                     dataKey: newCnt,
                     voiceUrl: pathName,
                     desc: values.desc,
+                    // iosの場合はtrue
+                    ios: MediaRecorder.isTypeSupported("video/mp4"),
                   })
                   writeDataToFirestore({
                     kotoKey: targetKotoKey,
                     dataKey: newCnt,
                   })
                   setTimeout(() => {
-                    dispatch(closeModal())
                     router.replace("/completed")
-                  }, 1000)
+                    dispatch(closeModal())
+                  }, 10)
                 }}
               ></Button>
             )}

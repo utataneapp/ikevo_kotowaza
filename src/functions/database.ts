@@ -79,6 +79,7 @@ export const writeDataToDatabase = ({
   dataKey,
   voiceUrl,
   desc,
+  ios,
 }: DATA_DATABASE) => {
   set(ref(database, `data/${kotoKey}/${dataKey}`), {
     voiceUrl,
@@ -89,6 +90,7 @@ export const writeDataToDatabase = ({
     createdAt: nowDate(),
     like: 0,
     byUserId: userId,
+    ios,
   })
 }
 

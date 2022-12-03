@@ -1,9 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react"
-import ReactAudioPlayer from "react-audio-player"
 import { Button, Label } from "semantic-ui-react"
 import CountUpLabel from "./CountUpLabel"
-import AudioPlayer from "react-h5-audio-player"
-import "react-h5-audio-player/lib/styles.css"
+import AudioRecorder from "audio-recorder-polyfill"
 
 export default function Record({
   file,
@@ -52,7 +50,6 @@ export default function Record({
         chunks.push(ele.data)
       }
       setFile(chunks)
-      console.log(chunks)
     })
 
     audioRef.current.addEventListener("start", () => setAudioState(false))
@@ -106,9 +103,10 @@ export default function Record({
           <CountUpLabel cntFlag={cntFlag} setTenCntFlag={setTenCntFlag} />
         </div>
       ) : (
-        <AudioPlayer
+        <audio
           style={{ marginTop: "16px" }}
           src={URL.createObjectURL(new Blob(file))}
+          controls
         />
       )}
     </>

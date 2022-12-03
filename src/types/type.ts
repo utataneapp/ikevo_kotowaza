@@ -28,6 +28,7 @@ export type DATA_DATABASE = {
   createdAt?: string
   updatedAt?: string
   like?: number
+  ios?: boolean
 }
 
 export type KOTOWAZA_DATABASE = {

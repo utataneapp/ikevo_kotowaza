@@ -67,7 +67,7 @@ export default function MyPage() {
       </Grid>
       <Grid centered>
         {authentificated ? (
-          <Grid.Column width={12}>
+          <Grid.Column width={14}>
             <Segment.Group>
               <Segment>
                 <Item.Group>

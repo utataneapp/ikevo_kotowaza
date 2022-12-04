@@ -10,8 +10,10 @@ import { DATA_DATABASE } from "../src/types/type"
 import { RootState } from "../src/store"
 import { getDataFromDatabase } from "../src/functions/database"
 import Loading from "../src/components/Loading"
+import { useRouter } from "next/router"
 
 export default function Favorite() {
+  const router = useRouter()
   const [data, setData] = useState<DATA_DATABASE[]>([])
   const [loadingFlag, setLoadingFlag] = useState(true)
   const [targetName, setTargetName] = useState<string>("")
@@ -47,6 +49,12 @@ export default function Favorite() {
         })
     }
   }, [targetVoice])
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/home")
+    }
+  }, [])
 
   if (loadingFlag) {
     return (

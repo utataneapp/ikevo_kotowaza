@@ -11,6 +11,8 @@ import "react-h5-audio-player/lib/styles.css"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
 import DeleteButton from "../src/components/DeleteButton"
 import Loading from "../src/components/Loading"
+import { Route, useRouteError } from "react-router-dom"
+import { useRouter } from "next/router"
 
 export default function MyPage() {
   const currentUser = useSelector((state: RootState) => state.auth.currentUser)
@@ -23,6 +25,7 @@ export default function MyPage() {
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()
   const [loadingFlag, setLoadingFlag] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     if (currentUser) {
@@ -33,6 +36,12 @@ export default function MyPage() {
     }
     setLoadingFlag(false)
   }, [currentUser?.myVoice])
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/home")
+    }
+  }, [])
 
   useEffect(() => {
     if (targetVoice) {

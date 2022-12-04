@@ -1,8 +1,6 @@
 import { useRouter } from "next/router"
-import { SetStateAction } from "react"
 import { useDispatch } from "react-redux"
 import { Button, Dropdown, Menu } from "semantic-ui-react"
-import { logInUser } from "../../store/auth/authReducer"
 import { openModal } from "../../store/modal/modalReducer"
 
 export default function LogedOutMenu({ mobile }: { mobile: boolean }) {

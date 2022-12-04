@@ -142,8 +142,8 @@ export default class RecorderService {
         this._startRecordingWithStream(stream, timeslice)
       })
       .catch((error) => {
-        alert("Error with getUserMedia: " + error.message) // temp: helps when testing for strange issues on ios/safari
-        console.log(error)
+        alert("エラーが発生しました") // temp: helps when testing for strange issues on ios/safari
+        return
       })
   }
 

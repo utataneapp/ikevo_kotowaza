@@ -111,9 +111,7 @@ export default function NewRecord({
       .then(() => {
         setRecordingInProgress(true)
       })
-      .catch((err: any) => {
-        console.error(err)
-      })
+      .catch((err: any) => {})
   }
 
   function stopRecording() {
@@ -141,7 +139,12 @@ export default function NewRecord({
             >
               録音
             </Button>
-            <Button onClick={handleClickBtnRecording}>停止</Button>
+            <Button
+              onClick={handleClickBtnRecording}
+              disabled={!recordingInProgress}
+            >
+              停止
+            </Button>
           </>
         ) : (
           <Button onClick={handleRemove}>削除</Button>

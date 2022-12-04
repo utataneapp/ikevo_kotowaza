@@ -1,61 +1,48 @@
-import { Button, Grid, Icon, Item, Segment } from "semantic-ui-react"
+import { Button, Grid, Icon, Item, List, Segment } from "semantic-ui-react"
 import NavBar from "../src/common/nav/NavBar"
 import "semantic-ui-css/semantic.min.css"
-import { checkOkByDevice, displayId, kotowaza } from "../src/functions/lib"
-import { LikeComponent } from "../src/components/LikeComponent"
-import { getVoiceUrl } from "../src/functions/cloudStorage"
-import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { DATA_DATABASE } from "../src/types/type"
 import { RootState } from "../src/store"
+import { useEffect, useState } from "react"
+import { checkOkByDevice, displayId, kotowaza } from "../src/functions/lib"
 import { getDataFromDatabase } from "../src/functions/database"
+import { DATA_DATABASE } from "../src/types/type"
+import "react-h5-audio-player/lib/styles.css"
+import { getVoiceUrl } from "../src/functions/cloudStorage"
+import DeleteButton from "../src/components/DeleteButton"
 import Loading from "../src/components/Loading"
-import { useRouter } from "next/router"
 
-export default function Favorite2() {
-  const router = useRouter()
+export default function Mypage() {
+  const currentUser = useSelector((state: RootState) => state.auth.currentUser)
+  const authentificated = useSelector(
+    (state: RootState) => state.auth.authentificated
+  )
+  const tmpData = useSelector((state: RootState) => state.auth.tmpData)
+  const myPageData = currentUser?.myVoice as string[]
   const [data, setData] = useState<DATA_DATABASE[]>([])
-  const [loadingFlag, setLoadingFlag] = useState(true)
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()
-  const currentUser = useSelector((state: RootState) => state.auth.currentUser)
-  const tmpData = useSelector((state: RootState) => state.auth.tmpData)
-  const [currentLikeList, setCurrentLikeList] = useState<
-    { id: string; one: boolean }[]
-  >([])
-  const likeList = useSelector(
-    (state: RootState) => state.auth.currentUser?.likeList
-  )
-
+  const [loadingFlag, setLoadingFlag] = useState(true)
   useEffect(() => {
-    if (currentUser?.likeList) {
+    if (currentUser) {
       ;(async () => {
-        const result = await getDataFromDatabase(currentUser!.likeList, tmpData)
+        const result = await getDataFromDatabase(myPageData, tmpData)
         setData(result)
       })()
     }
     setLoadingFlag(false)
-  }, [likeList])
-
+  }, [])
   useEffect(() => {
     if (targetVoice) {
       targetVoice!.addEventListener("ended", () => {
         setTargetName("")
       })
-
       return () =>
         targetVoice!.removeEventListener("ended", () => {
           setTargetName("")
         })
     }
   }, [targetVoice])
-
-  useEffect(() => {
-    if (!currentUser) {
-      router.push("/home")
-    }
-  }, [])
-
   if (loadingFlag) {
     return (
       <>
@@ -73,29 +60,91 @@ export default function Favorite2() {
       <Grid>
         <Grid.Column width={16}></Grid.Column>
       </Grid>
-      {data.length !== 0 ? (
+      <Grid centered>
+        {authentificated ? (
+          <Grid.Column width={14}>
+            <Segment.Group>
+              <Segment>
+                <Item.Group>
+                  <Item>
+                    <Item.Image
+                      size="medium"
+                      circular
+                      src="user.png"
+                    ></Item.Image>
+                    <List>
+                      <List.Item>
+                        <List.Content>
+                          <List.Header>ユーザーID</List.Header>
+                          <List.Description>
+                            {currentUser && displayId(currentUser?.userId)}
+                          </List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
+                          <List.Header>ユーザー名</List.Header>
+                          <List.Description>
+                            {currentUser?.userName}
+                          </List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
+                          <List.Header>メールアドレス</List.Header>
+                          <List.Description>
+                            {currentUser?.email}
+                          </List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
+                          <List.Header>性別</List.Header>
+                          <List.Description>
+                            {currentUser?.sex}
+                          </List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
+                          <List.Header>年齢</List.Header>
+                          <List.Description>
+                            {currentUser?.age}
+                          </List.Description>
+                        </List.Content>
+                      </List.Item>
+                      <List.Item>
+                        <List.Content>
+                          <List.Header>アカウント登録日</List.Header>
+                          <List.Description>
+                            {currentUser?.createdAt}
+                          </List.Description>
+                        </List.Content>
+                      </List.Item>
+                    </List>
+                  </Item>
+                </Item.Group>
+              </Segment>
+            </Segment.Group>
+          </Grid.Column>
+        ) : (
+          <Grid.Column></Grid.Column>
+        )}
+      </Grid>
+      {data &&
         data.map((val) => (
           <Grid
             centered
             key={val.kotoKey + "-" + val.dataKey}
             verticalAlign="middle"
           >
-            <Grid.Column width={15}>
+            <Grid.Column width={14}>
               <Segment.Group>
                 <Segment>
                   <Item.Group>
                     <Item>
-                      <Item.Image
-                        size="tiny"
-                        circular
-                        src="icon.png"
-                      ></Item.Image>
                       <Item.Content verticalAlign="middle">
                         <Item.Header content={kotowaza(val.kotoKey!)!} />
-                        <Item.Content>
-                          <Icon name="user"></Icon>
-                          {`${val.userName} ${displayId(val.byUserId!)}`}
-                        </Item.Content>
                         <Item.Description content={val.desc} />
                       </Item.Content>
                     </Item>
@@ -108,78 +157,67 @@ export default function Favorite2() {
                       {val.createdAt}
                     </Item.Content>
                   </span>
-                  {checkOkByDevice(
-                    val!.ios!,
-                    MediaRecorder.isTypeSupported("video/mp4")
-                  ) && (
-                    <>
-                      <LikeComponent
-                        val={val}
-                        currentLikeList={currentLikeList}
-                        setCurrentLikeList={setCurrentLikeList}
-                      />
-
-                      {targetName ===
-                        val.kotoKey?.toString() +
-                          "-" +
-                          val.dataKey?.toString() && (
-                        <Button
-                          color="red"
-                          floated="right"
-                          onClick={() => {
-                            targetVoice!.pause()
-                            setTargetName("")
-                          }}
-                        >
-                          <i className="pause icon"></i>
-                        </Button>
-                      )}
-                      {targetName !==
-                        val.kotoKey?.toString() +
-                          "-" +
-                          val.dataKey?.toString() && (
-                        <Button
-                          color="facebook"
-                          floated="right"
-                          onClick={async () => {
-                            const url = await getVoiceUrl(
-                              kotowaza(val.kotoKey!)!,
-                              val.voiceUrl
-                            )
-                            const voice = new Audio(url!)
-                            voice.play()
-                            setTargetVoice(voice)
-                            setTargetName(
-                              val.kotoKey?.toString() +
-                                "-" +
-                                val.dataKey?.toString()
-                            )
-                          }}
-                        >
-                          <i className="play icon"></i>
-                        </Button>
-                      )}
-                    </>
-                  )}
+                  <DeleteButton val={val} />
+                  <Button color="pink" floated="right" onClick={async () => {}}>
+                    <i className="heart icon"></i>
+                    <label color="pink">{val.like}</label>
+                  </Button>
+                  {val &&
+                    checkOkByDevice(
+                      val!.ios!,
+                      MediaRecorder.isTypeSupported("video/mp4")
+                    ) && (
+                      <>
+                        {targetName ===
+                          val.kotoKey?.toString() +
+                            "-" +
+                            val.dataKey?.toString() && (
+                          <Button
+                            color="red"
+                            floated="right"
+                            onClick={() => {
+                              targetVoice!.pause()
+                              setTargetName("")
+                            }}
+                          >
+                            <i className="pause icon"></i>
+                          </Button>
+                        )}
+                        {targetName !==
+                          val.kotoKey?.toString() +
+                            "-" +
+                            val.dataKey?.toString() && (
+                          <Button
+                            color="facebook"
+                            floated="right"
+                            onClick={async () => {
+                              const url = await getVoiceUrl(
+                                kotowaza(val.kotoKey!)!,
+                                val.voiceUrl
+                              )
+                              const voice = new Audio(url!)
+                              voice.play()
+                              setTargetVoice(voice)
+                              setTargetName(
+                                val.kotoKey?.toString() +
+                                  "-" +
+                                  val.dataKey?.toString()
+                              )
+                            }}
+                          >
+                            <i className="play icon"></i>
+                          </Button>
+                        )}
+                      </>
+                    )}
                   {!val.ios && MediaRecorder.isTypeSupported("video/mp4") && (
                     <label>iOS端末では再生できません</label>
                   )}
-
-                  {/* <Button color="pink" floated="right" onClick={() => {}}>
-                      <i className="heart icon"></i>
-                    </Button> */}
                 </Segment>
               </Segment.Group>
             </Grid.Column>
           </Grid>
-        ))
-      ) : (
-        <Grid>
-          <Grid.Column textAlign="center" width={16}>
-            お気に入り登録はありません
-          </Grid.Column>
-        </Grid>
-      )}
+        ))}
     </>
   )
 }

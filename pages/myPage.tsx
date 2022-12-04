@@ -36,11 +36,11 @@ export default function MyPage() {
     setLoadingFlag(false)
   }, [])
 
-  // useEffect(() => {
-  //   if (!currentUser) {
-  //     router.push("/home")
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (!currentUser) {
+      router.push("/home")
+    }
+  }, [])
 
   useEffect(() => {
     if (targetVoice) {
@@ -74,77 +74,69 @@ export default function MyPage() {
         <Grid.Column width={16}></Grid.Column>
       </Grid>
       <Grid centered>
-        {authentificated ? (
-          <Grid.Column width={14}>
-            <Segment.Group>
-              <Segment>
-                <Item.Group>
-                  <Item>
-                    <Item.Image
-                      size="medium"
-                      circular
-                      src="user.png"
-                    ></Item.Image>
+        <Grid.Column width={14}>
+          <Segment.Group>
+            <Segment>
+              <Item.Group>
+                <Item>
+                  <Item.Image
+                    size="medium"
+                    circular
+                    src="user.png"
+                  ></Item.Image>
 
-                    <List>
-                      <List.Item>
-                        <List.Content>
-                          <List.Header>ユーザーID</List.Header>
-                          <List.Description>
-                            {currentUser && displayId(currentUser?.userId)}
-                          </List.Description>
-                        </List.Content>
-                      </List.Item>
-                      <List.Item>
-                        <List.Content>
-                          <List.Header>ユーザー名</List.Header>
-                          <List.Description>
-                            {currentUser?.userName}
-                          </List.Description>
-                        </List.Content>
-                      </List.Item>
-                      <List.Item>
-                        <List.Content>
-                          <List.Header>メールアドレス</List.Header>
-                          <List.Description>
-                            {currentUser?.email}
-                          </List.Description>
-                        </List.Content>
-                      </List.Item>
+                  <List>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>ユーザーID</List.Header>
+                        <List.Description>
+                          {currentUser && displayId(currentUser?.userId)}
+                        </List.Description>
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>ユーザー名</List.Header>
+                        <List.Description>
+                          {currentUser?.userName}
+                        </List.Description>
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>メールアドレス</List.Header>
+                        <List.Description>
+                          {currentUser?.email}
+                        </List.Description>
+                      </List.Content>
+                    </List.Item>
 
-                      <List.Item>
-                        <List.Content>
-                          <List.Header>性別</List.Header>
-                          <List.Description>
-                            {currentUser?.sex}
-                          </List.Description>
-                        </List.Content>
-                      </List.Item>
-                      <List.Item>
-                        <List.Content>
-                          <List.Header>年齢</List.Header>
-                          <List.Description>
-                            {currentUser?.age}
-                          </List.Description>
-                        </List.Content>
-                      </List.Item>
-                      <List.Item>
-                        <List.Content>
-                          <List.Header>アカウント登録日</List.Header>
-                          <List.Description>
-                            {currentUser?.createdAt}
-                          </List.Description>
-                        </List.Content>
-                      </List.Item>
-                    </List>
-                  </Item>
-                </Item.Group>
-              </Segment>
-            </Segment.Group>
-          </Grid.Column>
-        ) : (
-          <Grid.Column></Grid.Column>
-        )}
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>性別</List.Header>
+                        <List.Description>{currentUser?.sex}</List.Description>
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>年齢</List.Header>
+                        <List.Description>{currentUser?.age}</List.Description>
+                      </List.Content>
+                    </List.Item>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>アカウント登録日</List.Header>
+                        <List.Description>
+                          {currentUser?.createdAt}
+                        </List.Description>
+                      </List.Content>
+                    </List.Item>
+                  </List>
+                </Item>
+              </Item.Group>
+            </Segment>
+          </Segment.Group>
+        </Grid.Column>
       </Grid>
 
       {data &&

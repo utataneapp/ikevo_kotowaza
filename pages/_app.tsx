@@ -10,7 +10,6 @@ import ModalManager from "../src/common/modals/ModalManager"
 import { getFirestore } from "firebase/firestore"
 import { getDatabase } from "firebase/database"
 import { getStorage } from "firebase/storage"
-import UseRequireLogin from "../src/layout/UseRequireLogin"
 import { DefaultSeo } from "next-seo"
 import Head from "next/head"
 

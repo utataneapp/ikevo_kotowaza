@@ -117,7 +117,7 @@ export const kotowazaList = [
     key: 20,
     text: "陰徳あれば必ず陽報あり",
     value: "陰徳あれば必ず陽報あり",
-    reading: "いんとくあればかならずようほうあ",
+    reading: "いんとくあればかならずようほうあり",
   },
 ]
 

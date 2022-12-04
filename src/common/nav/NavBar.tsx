@@ -49,7 +49,7 @@ export default function NavBar() {
             {authentificated && (
               <Menu.Item
                 content="マイページ"
-                onClick={() => router.push("/favorite2")}
+                onClick={() => router.push("/mypage")}
               />
             )}
             {authentificated && (

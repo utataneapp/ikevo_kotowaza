@@ -36,11 +36,11 @@ export default function MyPage() {
     setLoadingFlag(false)
   }, [])
 
-  useEffect(() => {
-    if (!currentUser) {
-      router.push("/home")
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (!currentUser) {
+  //     router.push("/home")
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (targetVoice) {

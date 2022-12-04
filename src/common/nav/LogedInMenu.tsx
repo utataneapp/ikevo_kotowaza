@@ -32,7 +32,7 @@ export default function LogedInMenu({ mobile }: { mobile: boolean }) {
 
           {mobile && (
             <Dropdown.Item
-              onClick={() => router.push("/like")}
+              onClick={() => router.push("/favorite")}
               text="お気に入り"
               icon="star outline"
             />

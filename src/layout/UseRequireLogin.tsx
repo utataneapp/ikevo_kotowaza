@@ -14,12 +14,14 @@ export default function UseRequireLogin() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (authentificated) {
-      dispatch(logInUser({ ...currentUser }))
-      router.push("/home")
-    } else {
-      dispatch(openModal({ modalTypes: "LoginForm", modalProps: {} }))
-      router.push("/home")
+    if (navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
+      if (authentificated) {
+        dispatch(logInUser({ ...currentUser }))
+        router.push("/home")
+      } else {
+        dispatch(openModal({ modalTypes: "LoginForm", modalProps: {} }))
+        router.push("/home")
+      }
     }
   }, [])
 

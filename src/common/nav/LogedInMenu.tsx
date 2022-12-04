@@ -25,7 +25,7 @@ export default function LogedInMenu({ mobile }: { mobile: boolean }) {
             icon="plus"
           />
           <Dropdown.Item
-            onClick={() => router.push("/mypage")}
+            onClick={() => router.push("/my")}
             text="マイページ"
             icon="user circle"
           />

@@ -12,6 +12,7 @@ import { getDatabase } from "firebase/database"
 import { getStorage } from "firebase/storage"
 import { DefaultSeo } from "next-seo"
 import Head from "next/head"
+import UseRequireLogin from "../src/layout/UseRequireLogin"
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_VALFIREBASE_API_KEY,
@@ -64,7 +65,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
 
         <ScrollToTop />
-        {/* <UseRequireLogin /> */}
+        <UseRequireLogin />
         <ModalManager />
         <Component {...pageProps} />
       </Provider>

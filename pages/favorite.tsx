@@ -50,12 +50,6 @@ export default function Favorite() {
     }
   }, [targetVoice])
 
-  useEffect(() => {
-    if (!currentUser) {
-      router.push("/home")
-    }
-  }, [])
-
   if (loadingFlag) {
     return (
       <>

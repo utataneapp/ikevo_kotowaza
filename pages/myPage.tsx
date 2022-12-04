@@ -11,15 +11,12 @@ import "react-h5-audio-player/lib/styles.css"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
 import DeleteButton from "../src/components/DeleteButton"
 import Loading from "../src/components/Loading"
-import { Route } from "react-router-dom"
-import { useRouter } from "next/router"
 
-export default function MyPage() {
+export default function Mypage() {
   const currentUser = useSelector((state: RootState) => state.auth.currentUser)
   const authentificated = useSelector(
     (state: RootState) => state.auth.authentificated
   )
-  const router = useRouter()
   const tmpData = useSelector((state: RootState) => state.auth.tmpData)
   const myPageData = currentUser?.myVoice as string[]
   const [data, setData] = useState<DATA_DATABASE[]>([])
@@ -35,7 +32,7 @@ export default function MyPage() {
       })()
     }
     setLoadingFlag(false)
-  }, [currentUser?.myVoice])
+  }, [])
 
   useEffect(() => {
     if (targetVoice) {
@@ -49,12 +46,6 @@ export default function MyPage() {
         })
     }
   }, [targetVoice])
-
-  // useEffect(() => {
-  //   if (!currentUser) {
-  //     router.push("/home")
-  //   }
-  // }, [])
 
   if (loadingFlag) {
     return (

@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { Menu, Button, Grid } from "semantic-ui-react"
 import "semantic-ui-css/semantic.min.css"
 import { RootState } from "../../store"
-
 import { openModal } from "../../store/modal/modalReducer"
 import { useRouter } from "next/router"
 import LogedInMenu from "./LogedInMenu"

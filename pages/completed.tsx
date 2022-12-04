@@ -1,6 +1,5 @@
 import { useRouter } from "next/router"
 import { Button, Divider, Header, Item, Segment } from "semantic-ui-react"
-import styles from "../styles/Home.module.css"
 
 export default function Completed() {
   const router = useRouter()

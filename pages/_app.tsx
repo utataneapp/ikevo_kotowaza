@@ -65,7 +65,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
 
         <ScrollToTop />
-        {/* <UseRequireLogin /> */}
+        <UseRequireLogin />
         <ModalManager />
         <Component {...pageProps} />
       </Provider>

@@ -50,11 +50,11 @@ export default function MyPage() {
     }
   }, [targetVoice])
 
-  useEffect(() => {
-    if (!currentUser) {
-      router.push("/home")
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (!currentUser) {
+  //     router.push("/home")
+  //   }
+  // }, [])
 
   if (loadingFlag) {
     return (

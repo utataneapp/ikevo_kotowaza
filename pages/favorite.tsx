@@ -9,12 +9,15 @@ import { useSelector } from "react-redux"
 import { DATA_DATABASE } from "../src/types/type"
 import { RootState } from "../src/store"
 import { getDataFromDatabase } from "../src/functions/database"
+import Loading from "../src/components/Loading"
 
-export default function Like() {
+export default function Favorite() {
   const [data, setData] = useState<DATA_DATABASE[]>([])
+  const [loadingFlag, setLoadingFlag] = useState(true)
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()
   const currentUser = useSelector((state: RootState) => state.auth.currentUser)
+  const tmpData = useSelector((state: RootState) => state.auth.tmpData)
   const [currentLikeList, setCurrentLikeList] = useState<
     { id: string; one: boolean }[]
   >([])
@@ -25,11 +28,11 @@ export default function Like() {
   useEffect(() => {
     if (currentUser?.likeList) {
       ;(async () => {
-        const result = await getDataFromDatabase(currentUser?.likeList)
-        console.log(result)
+        const result = await getDataFromDatabase(currentUser!.likeList, tmpData)
         setData(result)
       })()
     }
+    setLoadingFlag(false)
   }, [likeList])
 
   useEffect(() => {
@@ -45,6 +48,17 @@ export default function Like() {
     }
   }, [targetVoice])
 
+  if (loadingFlag) {
+    return (
+      <>
+        <NavBar />
+        <Grid>
+          <Grid.Column width={16}></Grid.Column>
+        </Grid>
+        <Loading />
+      </>
+    )
+  }
   return (
     <>
       <NavBar />

@@ -8,18 +8,23 @@ import { getDataFromDatabase } from "../src/functions/database"
 import { checkOkByDevice, displayId, kotowaza } from "../src/functions/lib"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
 import { LikeComponent } from "../src/components/LikeComponent"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../src/store"
 import DeleteButton from "../src/components/DeleteButton"
+import Loading from "../src/components/Loading"
+import { reflectInTmpData } from "../src/store/auth/authReducer"
 
 export default function Home() {
   const [data, setData] = useState<DATA_DATABASE[]>([])
+  const [loadingFlag, setLoadingFlag] = useState(true)
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()
   const currentUser = useSelector((state: RootState) => state.auth.currentUser)
+  const tmpData = useSelector((state: RootState) => state.auth.tmpData)
   const [currentLikeList, setCurrentLikeList] = useState<
     { id: string; one: boolean }[]
   >([])
+  const dispatch = useDispatch()
 
   useEffect(() => {
     let displayed = [{}] as DATA_DATABASE[]
@@ -27,10 +32,12 @@ export default function Home() {
       const data = await getDataFromFirestore()
       if (data) {
         const idList = await Promise.all(data.map((obj) => obj.id))
-        displayed = await getDataFromDatabase(idList)
+        displayed = await getDataFromDatabase(idList, tmpData)
         setData(displayed)
+        dispatch(reflectInTmpData(displayed))
       }
     })()
+    setLoadingFlag(false)
   }, [currentUser?.myVoice])
 
   useEffect(() => {
@@ -46,6 +53,17 @@ export default function Home() {
     }
   }, [targetVoice])
 
+  if (loadingFlag) {
+    return (
+      <>
+        <NavBar />
+        <Grid>
+          <Grid.Column width={16}></Grid.Column>
+        </Grid>
+        <Loading />
+      </>
+    )
+  }
   return (
     <>
       <NavBar />

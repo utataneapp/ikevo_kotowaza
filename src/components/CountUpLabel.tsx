@@ -27,9 +27,5 @@ export default function CountUpLabel({
     }
   }, [cnt])
 
-  return (
-    <Label size="big" color="black">
-      {`0:0${cnt}`}
-    </Label>
-  )
+  return <Label size="huge">{`0:0${cnt}`}</Label>
 }

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Button } from "semantic-ui-react"
 import { changeLikeToDatabase, updateUserDatabase } from "../functions/database"
 import { RootState } from "../store"
-import { updateUser } from "../store/auth/authReducer"
+import { deleteTmpData, updateUser } from "../store/auth/authReducer"
 import { DATA_DATABASE } from "../types/type"
 
 export const LikeComponent = ({
@@ -47,6 +47,7 @@ export const LikeComponent = ({
       onClick={async () => {
         if (currentUser) {
           if (currentUser.userId !== val.byUserId) {
+            dispath(deleteTmpData(val))
             let newList = [] as string[]
             const key = val.kotoKey + "-" + val.dataKey
             if (currentUser.likeList) {

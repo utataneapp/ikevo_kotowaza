@@ -5,7 +5,6 @@ import "semantic-ui-css/semantic.min.css"
 import { useDispatch, useSelector } from "react-redux"
 import ModalWrapper from "../modals/ModalWrapper"
 import { closeModal } from "../../store/modal/modalReducer"
-import Record from "../../components/Record"
 import MyTextArea from "./MyTextArea"
 import { SyntheticEvent, useState } from "react"
 import { uploadDataAndReturnPath } from "../../functions/cloudStorage"
@@ -21,7 +20,7 @@ import { RootState } from "../../store"
 import { updateUser } from "../../store/auth/authReducer"
 import { writeDataToFirestore } from "../../functions/firestore"
 import { useRouter } from "next/router"
-import Record3 from "../../components/Record3"
+import NewRecord from "../../components/NewRecord"
 
 type Recording = {
   ts: number
@@ -89,7 +88,7 @@ export default function VoicePostForm() {
               placeholder="説明（最大140文字）"
               maxLength={140}
             />
-            <Record3 file={file} setFile={setFile} />
+            <NewRecord file={file} setFile={setFile} />
             <Grid>
               <Grid.Column width={16}></Grid.Column>
               <Grid.Column width={16}></Grid.Column>
@@ -145,6 +144,7 @@ export default function VoicePostForm() {
                     // iosの場合はtrue
                     ios: iosFlag,
                   })
+
                   writeDataToFirestore({
                     kotoKey: targetKotoKey,
                     dataKey: newCnt,

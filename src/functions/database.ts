@@ -43,6 +43,7 @@ export const updateUserDatabase = ({
   createdAt,
 }: USER_DATABASE) => {
   // undefinedの可能性があるため
+  const newMyVoice = myVoice ? myVoice : []
   set(ref(database, "users/" + userId + "/"), {
     userName,
     email,
@@ -50,7 +51,7 @@ export const updateUserDatabase = ({
     age,
     photoUrl,
     voiceCnt,
-    myVoice,
+    myVoice: newMyVoice,
     likeList,
     createdAt,
   })
@@ -115,7 +116,10 @@ export const writeDataToDatabaseForDelete = ({
   })
 }
 
-export const getDataFromDatabase = async (keyArray: string[]) => {
+export const getDataFromDatabase = async (
+  keyArray: string[],
+  tmpData: DATA_DATABASE[]
+) => {
   const dbRef = ref(database)
   let dataArray = [] as DATA_DATABASE[]
   keyArray &&
@@ -124,13 +128,21 @@ export const getDataFromDatabase = async (keyArray: string[]) => {
         if (val) {
           const kotoKey = val.substring(0, val.indexOf("-"))
           const dataKey = val.substring(val.indexOf("-") + 1)
-          await get(child(dbRef, `data/${kotoKey}/${dataKey}`)).then(
-            (snapshot) => {
-              if (snapshot.exists()) {
-                dataArray.unshift(snapshot.val())
-              }
-            }
+          // tmpDataにある場合はそちらから取得する
+          const isTmpData = tmpData.find(
+            (obj) => obj.kotoKey + "-" + obj.dataKey === val
           )
+          if (isTmpData) {
+            dataArray.unshift(isTmpData)
+          } else {
+            await get(child(dbRef, `data/${kotoKey}/${dataKey}`)).then(
+              (snapshot) => {
+                if (snapshot.exists()) {
+                  dataArray.unshift(snapshot.val())
+                }
+              }
+            )
+          }
         }
       })
     ))

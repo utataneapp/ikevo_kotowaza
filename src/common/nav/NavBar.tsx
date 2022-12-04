@@ -44,7 +44,7 @@ export default function NavBar() {
             {authentificated && (
               <Menu.Item
                 content="お気に入り"
-                onClick={() => router.push("/like")}
+                onClick={() => router.push("/favorite")}
               />
             )}
             {authentificated && (
@@ -56,7 +56,7 @@ export default function NavBar() {
             {authentificated && (
               <Menu.Item>
                 <Button
-                  color="black"
+                  inverted
                   content="音声を投稿"
                   onClick={() =>
                     dispatch(

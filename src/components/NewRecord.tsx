@@ -36,7 +36,7 @@ type RECORDING_SERVICE = {
   stopRecording: any
 } | null
 
-export default function Record3({
+export default function NewRecord({
   file,
   setFile,
 }: {
@@ -73,7 +73,6 @@ export default function Record3({
       return
     }
     window.addEventListener("keypress", handleKeypress)
-    console.log(file)
   }, [file])
 
   function handleRecording(evt: Event) {
@@ -107,7 +106,6 @@ export default function Record3({
     recorderService!.config.createDynamicsCompressorNode = false
     recorderService!.config.enableEchoCancellation = true
     recorderService!.config.manualEncoderId = encoders[2].id
-    console.log(recorderService!.config.manualEncoderId)
     recorderService!
       .startRecording()
       .then(() => {

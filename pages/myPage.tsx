@@ -1,42 +1,37 @@
-import {
-  Button,
-  Grid,
-  GridColumn,
-  Icon,
-  Item,
-  List,
-  Segment,
-} from "semantic-ui-react"
+import { Button, Grid, Icon, Item, List, Segment } from "semantic-ui-react"
 import NavBar from "../src/common/nav/NavBar"
 import "semantic-ui-css/semantic.min.css"
 import { useSelector } from "react-redux"
 import { RootState } from "../src/store"
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import { checkOkByDevice, displayId, kotowaza } from "../src/functions/lib"
 import { getDataFromDatabase } from "../src/functions/database"
 import { DATA_DATABASE } from "../src/types/type"
 import "react-h5-audio-player/lib/styles.css"
 import { getVoiceUrl } from "../src/functions/cloudStorage"
 import DeleteButton from "../src/components/DeleteButton"
+import Loading from "../src/components/Loading"
 
 export default function MyPage() {
   const currentUser = useSelector((state: RootState) => state.auth.currentUser)
   const authentificated = useSelector(
     (state: RootState) => state.auth.authentificated
   )
+  const tmpData = useSelector((state: RootState) => state.auth.tmpData)
   const myPageData = currentUser?.myVoice as string[]
   const [data, setData] = useState<DATA_DATABASE[]>([])
   const [targetName, setTargetName] = useState<string>("")
   const [targetVoice, setTargetVoice] = useState<HTMLAudioElement>()
+  const [loadingFlag, setLoadingFlag] = useState(true)
 
   useEffect(() => {
     if (currentUser) {
       ;(async () => {
-        const result = await getDataFromDatabase(myPageData)
+        const result = await getDataFromDatabase(myPageData, tmpData)
         setData(result)
       })()
     }
+    setLoadingFlag(false)
   }, [currentUser?.myVoice])
 
   useEffect(() => {
@@ -51,6 +46,18 @@ export default function MyPage() {
         })
     }
   }, [targetVoice])
+
+  if (loadingFlag) {
+    return (
+      <>
+        <NavBar />
+        <Grid>
+          <Grid.Column width={16}></Grid.Column>
+        </Grid>
+        <Loading />
+      </>
+    )
+  }
 
   return (
     <>

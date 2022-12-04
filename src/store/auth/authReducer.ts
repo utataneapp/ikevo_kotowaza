@@ -5,7 +5,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: {
     authentificated: false,
-    tmpData: [],
+    tmpData: [] as DATA_DATABASE[],
     currentUser: null as null | {
       userId: string
       userName: string
@@ -84,9 +84,31 @@ export const authSlice = createSlice({
         },
       }
     },
-    refrectInTmpData: (state, aciton: PayloadAction<DATA_DATABASE[]>) => {
+    reflectInTmpData: (state, aciton: PayloadAction<DATA_DATABASE[]>) => {
+      const newTemData = [
+        ...aciton.payload,
+        ...state.tmpData,
+      ] as DATA_DATABASE[]
+      // 重複を削除(インデックスが若い値を残す)
+      const result = newTemData.filter(
+        (val, i, self) =>
+          self.findIndex(
+            (e) => e.kotoKey === val.kotoKey && e.dataKey === val.dataKey
+          ) === i
+      )
       return {
         ...state,
+        tmpData: result,
+      }
+    },
+    deleteTmpData: (state, aciton: PayloadAction<DATA_DATABASE>) => {
+      return {
+        ...state,
+        tmpData: state.tmpData.filter(
+          (obj) =>
+            obj.kotoKey + "-" + obj.dataKey !==
+              aciton.payload.kotoKey + "-" + aciton.payload.dataKey && obj
+        ),
       }
     },
   },
@@ -97,6 +119,7 @@ export const {
   logInUser,
   logOutUser,
   updateUser,
-  refrectInTmpData,
+  reflectInTmpData,
+  deleteTmpData,
 } = authSlice.actions
 export default authSlice.reducer
